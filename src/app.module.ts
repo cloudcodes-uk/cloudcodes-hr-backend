@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
@@ -18,9 +19,11 @@ import configuration from './config/configuration';
       useFactory: () => ({
         type: 'postgres',
         url: process.env.DATABASE_URL,
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        entities: [join(__dirname, 'src/**/*.entity.{ts,js}')],
+        synchronize: false,
         logging: false,
+        migrations: ['dist/migrations/*.js'],
+        migrationsRun: true,
       }),
     }),
     AuthModule,
