@@ -1,7 +1,10 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { ClockService } from './clock.service';
 import { CreateClockSessionDto } from './dto/create-clock-session.dto';
 
+@ApiTags('Clock')
+@ApiBearerAuth()
 @Controller('clock')
 export class ClockController {
   constructor(private readonly service: ClockService) {}

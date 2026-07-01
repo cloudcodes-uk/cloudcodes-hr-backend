@@ -1,8 +1,11 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeProfileDto } from './dto/create-employee-profile.dto';
 import { UpdateEmployeeProfileDto } from './dto/update-employee-profile.dto';
 
+@ApiTags('Employees')
+@ApiBearerAuth()
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly service: EmployeesService) {}
