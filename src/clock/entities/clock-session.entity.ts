@@ -16,7 +16,7 @@ export class ClockSession {
   @Column({ name: 'clocked_in_at' })
   clockedInAt: Date;
 
-  @Column({ name: 'clocked_out_at', nullable: true })
+  @Column({ name: 'clocked_out_at', type: 'timestamp', nullable: true })
   clockedOutAt: Date | null;
 
   @CreateDateColumn({ name: 'created_at' })
