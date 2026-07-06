@@ -27,7 +27,7 @@ async function bootstrap() {
 
   app.useGlobalPipes();
 
-  app.getHttpAdapter().getInstance().get('/', (_req: any, res: any) => {
+  app.getHttpAdapter().getInstance().get('/api', (_req: any, res: any) => {
     _req.log.info(
       {
         port: process.env.PORT || 3001,
