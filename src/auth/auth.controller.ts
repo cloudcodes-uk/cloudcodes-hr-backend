@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Body,
   HttpCode,
@@ -31,7 +32,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('me')
+  @Get('me')
   me(@GetUser() user: any) {
     return {
       id: user.id,

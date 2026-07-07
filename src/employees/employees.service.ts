@@ -5,6 +5,7 @@ import { EmployeeProfile } from './entities/employee-profile.entity';
 import { CreateEmployeeProfileDto } from './dto/create-employee-profile.dto';
 import { UpdateEmployeeProfileDto } from './dto/update-employee-profile.dto';
 import { EmployeeProfileResponseDto } from './dto/employee-profile-response.dto';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class EmployeesService {
@@ -20,8 +21,40 @@ export class EmployeesService {
   }
 
   async findAll(): Promise<EmployeeProfileResponseDto[]> {
-    const rows = await this.repo.find({ order: { createdAt: 'DESC' } });
-    return rows.map((r) => this.toResponse(r));
+    const rows = await this.repo
+      .createQueryBuilder('e')
+      .leftJoin(User, 'u', 'u.id = e.userId')
+      .select([
+        'e.id',
+        'e.userId',
+        'e.position',
+        'e.department',
+        'e.managerId',
+        'e.location',
+        'e.status',
+        'e.createdAt',
+        'e.updatedAt',
+        'u.name',
+        'u.email',
+        'u.role',
+      ])
+      .orderBy('e.createdAt', 'DESC')
+      .getRawMany();
+
+    return rows.map((r) => ({
+      id: r.e_id,
+      userId: r.e_userId,
+      position: r.e_position,
+      department: r.e_department,
+      managerId: r.e_managerId,
+      location: r.e_location,
+      status: r.e_status,
+      createdAt: r.e_createdAt,
+      updatedAt: r.e_updatedAt,
+      name: r.u_name,
+      email: r.u_email,
+      role: r.u_role,
+    }));
   }
 
   async findOne(id: string): Promise<EmployeeProfile> {
