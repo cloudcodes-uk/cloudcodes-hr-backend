@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.repo.findOne({ where: { email } });
+    return this.repo.findOne({ where: { email }, select: ['id', 'email', 'passwordHash', 'name', 'initials', 'role', 'status', 'department', 'avatarUrl', 'joinedAt'] });
   }
 
   async findAll(): Promise<UserResponseDto[]> {

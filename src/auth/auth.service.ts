@@ -20,6 +20,9 @@ export class AuthService {
   }
 
   async login(user: { id: string; email: string; name: string; role: string }) {
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
     const accessToken = await this.jwt.signAsync({
       sub: user.id,
       email: user.email,
