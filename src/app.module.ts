@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { EmployeeModule } from './employees/employees.module';
 import { LeaveModule } from './leave/leave.module';
 import { ClockModule } from './clock/clock.module';
+import { PayrollModule } from './payroll/payroll.module';
 import configuration from './config/configuration';
 import { User } from './users/entities/user.entity';
 import { EmployeeProfile } from './employees/entities/employee-profile.entity';
@@ -35,6 +36,7 @@ import { ClockSession } from './clock/entities/clock-session.entity';
     EmployeeModule,
     LeaveModule,
     ClockModule,
+    PayrollModule,
   ],
 })
 export class AppModule {}
