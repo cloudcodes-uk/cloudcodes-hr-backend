@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
+import { UsersService } from "../users/users.service";
+import { CreateUserDto } from "../users/dto/create-user.dto";
+import { LoginDto } from "./dto";
 
 @Injectable()
 export class AuthService {
@@ -19,9 +20,14 @@ export class AuthService {
     return user;
   }
 
-  async login(user: { id: string; email: string; name: string; role: string }) {
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
+    console.log(email);
+    console.log(password);
+    const user = await this.validateUser(email, password);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      console.log(`HERE 1`);
+      throw new UnauthorizedException("Invalid credentials");
     }
     const accessToken = await this.jwt.signAsync({
       sub: user.id,
@@ -36,9 +42,9 @@ export class AuthService {
         id: user.id,
         name: user.name,
         initials: user.name
-          .split(' ')
+          .split(" ")
           .map((n: any) => n[0])
-          .join('')
+          .join("")
           .slice(0, 2)
           .toUpperCase(),
         email: user.email,
@@ -49,9 +55,9 @@ export class AuthService {
 
   async register(dto: CreateUserDto) {
     const exists = await this.users.findByEmail(dto.email);
-    if (exists) throw new UnauthorizedException('Email already registered');
+    if (exists) throw new UnauthorizedException("Email already registered");
     const passwordHash = await bcrypt.hash(dto.password, 10);
     const user = await this.users.create(dto, passwordHash);
-    return this.login(user);
+    return this.login({ email: dto.email, password: dto.password });
   }
 }
